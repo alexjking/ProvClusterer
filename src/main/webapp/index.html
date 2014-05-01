@@ -1,0 +1,152 @@
+<!DOCTYPE >
+<head>
+    <title>ProvClusterer</title>
+    <script src="js/jquery-1.11.0.js"></script>
+    <script src="js/jquery.panzoom.min.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="js/api.js"></script>
+    <link rel="stylesheet" href="css.css">
+    <script src="js/prov-clustering.js"></script>
+</head>
+
+<body>
+
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand active" href="">ProvClusterer</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+          	<li class="dropdown">
+          		<a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
+	          	<ul class="dropdown-menu">
+		            <li><a href="#" onclick="load_modal()">Load...</a></li>
+		            <li><a href="#" onclick="save_modal()">Save...</a></li>
+	          	</ul>
+
+		            
+	          </li>
+            <li><a href="about">About</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    
+    
+	<div class="container">
+		<h1>Clustering Visualisation</h1>
+		<p>
+			This tool can be used to cluster provenance documents located on the ProvStore and
+			provides an interactive provenance display where clusters can be expanded and collapsed.
+		</p> 
+		
+		<div class="alert alert-danger alert-dismissable" id="status-error">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>	
+			<div id="status-error-message"></div>
+		</div>
+		<div class="alert alert-success alert-dismissable" id="status-success">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>	
+			<div id="status-success-message"></div>
+		</div>
+		<div id="clustering-frame">
+			<div id="clustering-options">
+					<!--  h2>Clustering Options</h2-->
+					<div class="pull-left">
+						<form id="cluster-form" onsubmit="return false;">
+							<b>Number of clusters</b>
+							<input type="number" id="num-clusters-form" value="1" min="1"/>
+							<input type="button" value="Cluster" onclick="clusterUsingForm()" />
+						</form>
+					</div>
+					<div class="pull-right">
+						<div class="btn-group">
+							<a class="btn active view-button" id="all-button" href="#" onclick="getDocumentFromProvStore(); return false;">All</a>
+							<a class="btn view-button" id="data-button" href="#" onclick="getDocumentViewFromProvStore('data'); return false;">Data</a>
+							<a class="btn view-button" id="process-button" href="#" onclick="getDocumentViewFromProvStore('process'); return false;">Process</a>
+							<a class="btn view-button"  id="responsibility-button" href="#" onclick="getDocumentViewFromProvStore('responsibility'); return false;">Responsibility</a>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			<div id="svgparent">
+				<div id="svgcontainer">	</div>
+				<div id="loading">
+					<div id="loading-center">
+						<img src="loading.gif"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="document-info">
+			<h2>Document Info</h2>
+			<div id="document-info-content"></div>
+		</div>
+		<div id="versions">
+			<h2>Save History</h2>
+		</div>
+	</div>
+	
+	<!-- Button trigger modal -->
+
+
+<!-- Load Modal -->
+<div class="modal fade" id="load-modal" tabindex="-1" role="dialog" aria-labelledby="load-modal-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="load-modal-label">Load Document</h4>
+      </div>
+      <div class="modal-body">
+      	<p>Please enter the ProvStore ID of the document you wish to cluster.</p>
+        <form onsubmit="return false;">
+			<input type="number" id="document-id-input"/>
+			<!-- input type="button" value="Load Document" onclick="getDocumentFromProvStore()" /-->
+		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="getDocumentFromProvStore()">Load Document</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Save Modal -->
+<div class="modal fade" id="save-modal" tabindex="-1" role="dialog" aria-labelledby="save-modal-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="load-modal-label">Save Document</h4>
+      </div>
+      <div class="modal-body">
+      	<p>Please enter the title for this document.</p>
+        <form onsubmit="return false;">
+			<input type="text" id="save-document-title"/>
+		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveDocumentToProvStore();">Save Document</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
+
+
+
+
