@@ -1,7 +1,7 @@
 ProvClusterer
 =============
 
-ProvClusterer is an itneractive tool to create a simplified view of a W3C PROV document.
+ProvClusterer is an interactive tool to create a simplified view of a W3C PROV document.
  
 This tool identifies clusters of elements within a document using thee Girvan-Newman community clustering algorithm.
 Each group of elements can be collapsed into a single element resulting in a smaller and less complex document.
